@@ -34,6 +34,7 @@ public class BookmarkController {
     public ResponseEntity<?> getBookmarks(@PathVariable Integer userId){
         try{
             List<Bookmark> bookmarks = bookmarkService.getBookmarks(userId);
+            if(bookmarks.size() == 0) return new ResponseEntity<>("No Bookmarks found", HttpStatus.BAD_REQUEST);
             return new ResponseEntity<>(bookmarks, HttpStatus.OK);
         } catch (Exception e) {
             throw new RuntimeException(e);

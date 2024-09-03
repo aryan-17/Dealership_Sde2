@@ -3,7 +3,9 @@ package com.example.dealership.models;
 
 import com.example.dealership.enums.ListingType;
 import jakarta.persistence.*;
+import jdk.jfr.BooleanFlag;
 import lombok.*;
+import org.hibernate.annotations.ColumnDefault;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -35,4 +37,8 @@ public class Property {
 
     @ManyToOne(fetch = FetchType.LAZY)
     private User owner;
+
+    @Column(nullable = false)
+    @ColumnDefault(value = "true")
+    private Boolean available;
 }

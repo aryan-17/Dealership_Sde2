@@ -1,5 +1,6 @@
 package com.example.dealership.controllers;
 
+import com.example.dealership.enums.Units;
 import com.example.dealership.models.Property;
 import com.example.dealership.services.PropertiesService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,14 +16,29 @@ public class PropertiesController {
     private PropertiesService propertiesService;
 
     @PostMapping("/list")
-    public ResponseEntity<?> listProperty(@RequestBody Property property, @RequestParam(value = "name") String username){
+    public ResponseEntity<?> listProperty(
+            @RequestBody Property property,
+            @RequestParam(value = "name") String username,
+            @RequestParam(value = "unit") Units unit
+            ){
         try{
-//            if(username == "") return new ResponseEntity<>("Provide a Username to list a property", HttpStatus.BAD_REQUEST);
-            Boolean listing = propertiesService.saveNewProperty(property, username);
+            Boolean listing = propertiesService.saveNewProperty(property, username, unit);
             if(!listing){
-                return new ResponseEntity<>("User not Found", HttpStatus.NOT_FOUND);
+                return new ResponseEntity<>("Bad Request Params", HttpStatus.NOT_FOUND);
             }
             return new ResponseEntity<>("Property Listed", HttpStatus.CREATED);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @PatchMapping("/sold/{propId}")
+    public ResponseEntity<?> setAsSold(@PathVariable Integer propId, @RequestParam(value = "userId") Integer userId){
+        try{
+            Boolean marked = propertiesService.markedSold(propId, userId);
+            if(!marked) return new ResponseEntity<>("Invalid Request", HttpStatus.BAD_REQUEST);
+
+            return new ResponseEntity<>("Marked as Sold", HttpStatus.OK);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
