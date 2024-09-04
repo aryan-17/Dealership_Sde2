@@ -1,6 +1,5 @@
 package com.example.dealership.controllers;
 
-import com.example.dealership.Repository.PropertiesRepo;
 import com.example.dealership.enums.ListingType;
 import com.example.dealership.models.Property;
 import com.example.dealership.services.SearchService;

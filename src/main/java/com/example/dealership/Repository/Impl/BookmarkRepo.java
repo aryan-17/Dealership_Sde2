@@ -1,4 +1,4 @@
-package com.example.dealership.Repository;
+package com.example.dealership.Repository.Impl;
 
 import com.example.dealership.models.Bookmark;
 import com.example.dealership.models.Property;

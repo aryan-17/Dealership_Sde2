@@ -1,7 +1,7 @@
 package com.example.dealership.services;
 
 
-import com.example.dealership.Repository.PropertiesRepo;
+import com.example.dealership.Repository.Impl.PropertiesRepoImpl;
 import com.example.dealership.enums.ListingType;
 import com.example.dealership.models.Property;
 import lombok.extern.slf4j.Slf4j;
@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 public class SearchService {
 
     @Autowired
-    private PropertiesRepo propertiesRepo;
+    private PropertiesRepoImpl propertiesRepoImpl;
 
     public List<Property> getProperties(
             String location,
@@ -38,11 +38,11 @@ public class SearchService {
             String[] locationArr = location.split(",");
             allListings = Arrays
                     .stream(locationArr)
-                    .flatMap(loc -> propertiesRepo.findByLocationContainingIgnoreCase(loc).stream())
+                    .flatMap(loc -> propertiesRepoImpl.findByLocationContainingIgnoreCase(loc).stream())
                     .collect(Collectors.toList());
         }
 
-        allListings = propertiesRepo.findAll();
+        allListings = propertiesRepoImpl.findAll();
 
         allListings = allListings
                 .stream()

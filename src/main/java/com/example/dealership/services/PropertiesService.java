@@ -1,7 +1,7 @@
 package com.example.dealership.services;
 
-import com.example.dealership.Repository.PropertiesRepo;
-import com.example.dealership.Repository.UserRepo;
+import com.example.dealership.Repository.Impl.PropertiesRepoImpl;
+import com.example.dealership.Repository.Impl.UserRepoImpl;
 import com.example.dealership.enums.ListingType;
 import com.example.dealership.enums.Units;
 import com.example.dealership.models.Property;
@@ -17,13 +17,13 @@ import java.util.Optional;
 public class PropertiesService {
 
     @Autowired
-    private PropertiesRepo propertiesRepo;
+    private PropertiesRepoImpl propertiesRepoImpl;
 
     @Autowired
-    private UserRepo userRepo;
+    private UserRepoImpl userRepoImpl;
 
     public Boolean saveNewProperty(Property property, String username, Units unit) {
-        User user = userRepo.findByName(username);
+        User user = userRepoImpl.findByName(username);
 
         if (property.getDeposit() != null && property.getListing() == ListingType.SELL) {
             log.error("No deposit required if selling a property");
@@ -36,7 +36,7 @@ public class PropertiesService {
             if(unit == Units.YARD) size = size*3;
             property.setSize(size);
             property.setOwner(user);
-            propertiesRepo.save(property);
+            propertiesRepoImpl.save(property);
             return true;
         }
         log.error("User with name {} not found.", username);
@@ -47,8 +47,8 @@ public class PropertiesService {
 
         log.error(String.valueOf(propId));
 
-        Optional<User> user = userRepo.findById(userId);
-        Optional<Property> property = propertiesRepo.findById(propId);
+        Optional<User> user = userRepoImpl.findById(userId);
+        Optional<Property> property = propertiesRepoImpl.findById(propId);
 
         if (user.isEmpty()) {
             log.error("Invalid userId");
@@ -60,9 +60,9 @@ public class PropertiesService {
             return false;
         }
 
-        Property sold = propertiesRepo.findByOwnerAndId(user.get(), propId);
+        Property sold = propertiesRepoImpl.findByOwnerAndId(user.get(), propId);
         sold.setAvailable(false);
-        propertiesRepo.save(sold);
+        propertiesRepoImpl.save(sold);
         return true;
 
     }

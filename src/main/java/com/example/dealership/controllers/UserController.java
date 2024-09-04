@@ -2,20 +2,21 @@ package com.example.dealership.controllers;
 
 import com.example.dealership.models.Property;
 import com.example.dealership.models.User;
-import com.example.dealership.services.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.example.dealership.services.Implementation.UserServiceImpl;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 
 @RestController
 @RequestMapping("user")
 public class UserController {
 
-    @Autowired
-    private UserService userService;
+    private UserServiceImpl userService;
+
+    UserController(UserServiceImpl userService){
+        this.userService = userService;
+    }
 
     @PostMapping("/create-user")
     public ResponseEntity<?> addUser(@RequestBody User user){

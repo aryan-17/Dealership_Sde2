@@ -1,8 +1,8 @@
 package com.example.dealership.services;
 
-import com.example.dealership.Repository.BookmarkRepo;
-import com.example.dealership.Repository.PropertiesRepo;
-import com.example.dealership.Repository.UserRepo;
+import com.example.dealership.Repository.Impl.BookmarkRepo;
+import com.example.dealership.Repository.Impl.PropertiesRepoImpl;
+import com.example.dealership.Repository.Impl.UserRepoImpl;
 import com.example.dealership.models.Bookmark;
 import com.example.dealership.models.Property;
 import com.example.dealership.models.User;
@@ -23,20 +23,20 @@ public class BookmarkService {
     private BookmarkRepo bookmarkRepo;
 
     @Autowired
-    private UserRepo userRepo;
+    private UserRepoImpl userRepoImpl;
 
     @Autowired
-    private PropertiesRepo propertiesRepo;
+    private PropertiesRepoImpl propertiesRepoImpl;
 
     public Boolean addBookmark(String username, Integer propId) {
 
-        User userOpt = userRepo.findByName(username);
+        User userOpt = userRepoImpl.findByName(username);
         if (userOpt == null) {
             log.error("User with username {} not found.", username);
             return false;
         }
 
-        Optional<Property> propertyOpt = propertiesRepo.findById(propId);
+        Optional<Property> propertyOpt = propertiesRepoImpl.findById(propId);
         if (!propertyOpt.isPresent()) {
             log.error("Property with ID {} not found.", propId);
             return false;
@@ -57,7 +57,7 @@ public class BookmarkService {
     }
 
     public List<Bookmark> getBookmarks(Integer userId){
-        Optional<User> user = userRepo.findById(userId);
+        Optional<User> user = userRepoImpl.findById(userId);
 
         if(!user.isPresent()){
             log.error("No user found with userId {}", userId);

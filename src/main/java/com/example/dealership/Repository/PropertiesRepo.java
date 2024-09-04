@@ -1,20 +1,30 @@
 package com.example.dealership.Repository;
 
+import com.example.dealership.Repository.Impl.PropertiesRepoImpl;
 import com.example.dealership.models.Property;
 import com.example.dealership.models.User;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.util.Optional;
 
-public interface PropertiesRepo extends JpaRepository<Property, Integer> {
+@Repository
+public class PropertiesRepo {
 
-    List<Property> findByOwner(User user);
+    private PropertiesRepoImpl propertiesRepoImpl;
 
-    Property findByOwnerAndId(User user, Integer id);
+    PropertiesRepo(PropertiesRepoImpl propertiesRepoImpl){
+        this.propertiesRepoImpl = propertiesRepoImpl;
+    }
 
-    @Query("SELECT p FROM Property p WHERE LOWER(p.location) LIKE LOWER(CONCAT('%', :location, '%'))")
-    List<Property> findByLocationContainingIgnoreCase(@Param("location") String location);
+    public List<Property> findPropertiesByOwner(User user){
+        return propertiesRepoImpl.findByOwner(user);
+    }
+
+    public Property findPropertyByOwnerAndProperty(User user, Integer id){
+        return propertiesRepoImpl.findByOwnerAndId(user, id);
+    }
+
+    public List<Property> findPropertyByLocationContainingIgnoreCase(String location){
+        return  propertiesRepoImpl.findByLocationContainingIgnoreCase(location);
+    }
 }
